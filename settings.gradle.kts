@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "red social"
+rootProject.name = "redsocial"
 include(":app")
  

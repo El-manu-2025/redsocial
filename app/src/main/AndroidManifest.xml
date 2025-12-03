@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,15 +18,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RedSocial"
         tools:targetApi="31">
+
+        <!-- =================================================================== -->
+        <!--    ACTIVIDADES                                                      -->
+        <!-- =================================================================== -->
+
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ui.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 2. OTRAS ACTIVIDADES -->
+        <!-- He eliminado MainActivity porque seguramente ya no la usas -->
+        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.RegistroActivity" />
+        <activity android:name=".ui.FeedActivity" />
+        <activity android:name=".ui.CrearPublicacionActivity" />
+        <activity android:name=".ui.PerfilActivity" />
+
     </application>
 
 </manifest>
