@@ -6,9 +6,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.redsocial.databinding.ActivityFeedBinding
+import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Actividad principal de la aplicación, que muestra el Feed de noticias (timeline)
+ * Se encarga de cargar y mostrar las publicaciones de todos los usuarios en orden cronológico inverso
+ */
 class FeedActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFeedBinding
@@ -25,57 +30,75 @@ class FeedActivity : AppCompatActivity() {
         setupNavigation()
     }
 
+    /**
+     * Inicializa el RecyclerView y su adaptador para mostrar la lista de posts
+     */
     private fun setupRecyclerView() {
-        // Configuramos la lista vacía inicialmente
         adapter = PostAdapter(emptyList())
         binding.rvFeed.layoutManager = LinearLayoutManager(this)
         binding.rvFeed.adapter = adapter
     }
 
+    /**
+     * Escucha en tiempo real la colección de "publicaciones" en Firestore
+     * Actualiza la lista automáticamente cada vez que se agrega un nuevo post
+     * Convierte los datos crudos de Firestore a objetos Post para el adaptador
+     */
     private fun cargarPublicaciones() {
-        // Pedimos los posts a la colección "posts", ordenados por fecha (el más nuevo primero)
-        db.collection("posts")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+        db.collection("publicaciones")
+            .orderBy("creadoEl", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, e ->
-                if (e != null) {
-                    Toast.makeText(this, "Error al cargar: ${e.message}", Toast.LENGTH_SHORT).show()
+                if (e != null) return@addSnapshotListener
+
+                if (snapshots == null || snapshots.isEmpty) {
+                    adapter.updateData(emptyList())
                     return@addSnapshotListener
                 }
 
                 val listaPosts = mutableListOf<Post>()
 
-                if (snapshots != null) {
-                    for (doc in snapshots) {
-                        // Convertimos cada documento de Firebase a nuestro objeto Post
-                        val post = Post(
+                for (doc in snapshots) {
+                    val data = doc.data
+
+                    val autor = data["autorNombre"] as? String ?: "Desconocido"
+                    val texto = data["texto"] as? String ?: ""
+                    
+                    // Recuperar como Blob y convertir a ByteArray para mostrar la imagen
+                    val blob = data["imagenBytes"] as? com.google.firebase.firestore.Blob
+                    val imagenBytes = blob?.toBytes()
+                    
+                    val fecha = (data["creadoEl"] as? com.google.firebase.Timestamp)?.toDate()?.time ?: 0L
+
+                    listaPosts.add(
+                        Post(
                             id = doc.id,
-                            author = doc.getString("author") ?: "Anónimo",
-                            content = doc.getString("content") ?: "",
-                            timestamp = doc.getLong("timestamp") ?: 0L
+                            author = autor,
+                            content = texto,
+                            timestamp = fecha,
+                            imagenBytes = imagenBytes
                         )
-                        listaPosts.add(post)
-                    }
+                    )
                 }
 
-                // Actualizamos el adaptador con la nueva lista
                 adapter.updateData(listaPosts)
             }
     }
 
+    /**
+     * Configura la navegación inferior para moverse entre las pantallas principales (Home, Crear, Perfil)
+     */
     private fun setupNavigation() {
-        // Botón Home
+
         binding.btnNavHome.setOnClickListener {
+            // Al pulsar Home, scrolleamos al inicio para ver lo más nuevo
             binding.rvFeed.smoothScrollToPosition(0)
         }
 
-        // Botón Crear
         binding.btnNavCrear.setOnClickListener {
             val intent = Intent(this, CrearPublicacionActivity::class.java)
-            // No cerramos el feed (finish) para poder volver atrás con el botón físico
             startActivity(intent)
         }
 
-        // Botón Perfil
         binding.btnNavPerfil.setOnClickListener {
             val intent = Intent(this, PerfilActivity::class.java)
             startActivity(intent)

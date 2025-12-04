@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT: item_comentario.xml
+    DESCRIPCIÓN: Representa una fila individual en la lista de comentarios.
+    ESTRUCTURA:
+      - LinearLayout: Contenedor vertical simple.
+      - TextView (Autor): Nombre del usuario que comentó.
+      - TextView (Texto): Contenido del comentario.
+      - View (Separador): Línea delgada para separar comentarios visualmente.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@android:color/white">
+
+    <!-- Nombre del autor del comentario -->
+    <TextView
+        android:id="@+id/tvAutorComentario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Autor"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="#000000"/>
+
+    <!-- Contenido del comentario -->
+    <TextView
+        android:id="@+id/tvTextoComentario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Comentario..."
+        android:textSize="16sp"
+        android:textColor="#333333"/>
+
+    <!-- Línea separadora inferior -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>

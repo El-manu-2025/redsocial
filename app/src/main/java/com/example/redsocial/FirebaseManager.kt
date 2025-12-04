@@ -14,10 +14,10 @@ class FirebaseManager {
     // FUNCIÓN 1: GUARDAR UN USUARIO NUEVO
     // ----------------------------------------------------
     fun guardarUsuario(
-        idUsuario: String, // El UID que te da Firebase Auth o uno inventado
+        idUsuario: String,
         nombre: String,
         email: String,
-        fotoBytes: ByteArray? = null // La imagen en bytes (opcional)
+        fotoBytes: ByteArray? = null
     ) {
         // Si mandaron foto, la convertimos a Blob. Si no, queda null.
         val blobImagen = if (fotoBytes != null) Blob.fromBytes(fotoBytes) else null
@@ -45,20 +45,22 @@ class FirebaseManager {
     // ----------------------------------------------------
     fun crearPublicacion(
         userId: String,
+        autorNombre: String,
         texto: String,
         imagenBytes: ByteArray? = null
     ) {
-        val blobImagen = if (imagenBytes != null) Blob.fromBytes(imagenBytes) else null
+        val blob = if (imagenBytes != null) Blob.fromBytes(imagenBytes) else null
 
-        val nuevaPublicacion = Publicacion(
-            userId = userId,
-            texto = texto,
-            imagenBlob = blobImagen,
-            creadoEl = Timestamp.now()
+        val nuevoPostMap = hashMapOf(
+            "userId" to userId,
+            "autorNombre" to autorNombre,
+            "texto" to texto,
+            "imagenBytes" to blob, // Guardamos como Blob
+            "creadoEl" to Timestamp.now()
         )
 
-        // Usamos .add() para que Firebase genere un ID automático para el post
-        db.collection("publicaciones").add(nuevaPublicacion)
+        // Usamos .add() con el Mapa
+        db.collection("publicaciones").add(nuevoPostMap)
             .addOnSuccessListener { documentReference ->
                 Log.d("Firebase", "Publicación creada. ID: ${documentReference.id}")
             }
@@ -70,11 +72,7 @@ class FirebaseManager {
     // FUNCIÓN 3: GUARDAR UN COMENTARIO
     // ----------------------------------------------------
     /**
-     * Guarda un nuevo comentario asociado a una publicación específica.
-     * @param postId El ID del documento de la publicación padre.
-     * @param userId El ID del usuario que escribe el comentario.
-     * @param textoComentario El contenido del comentario.
-     * @param onResult Callback opcional para saber si se guardó correctamente (Booleano).
+     * Guarda un nuevo comentario asociado a una publicación específica
      */
     fun crearComentario(
         postId: String,

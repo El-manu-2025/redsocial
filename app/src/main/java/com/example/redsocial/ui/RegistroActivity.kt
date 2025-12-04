@@ -7,10 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.redsocial.FirebaseManager
 import com.example.redsocial.databinding.ActivityRegistroBinding
-import com.example.redsocial.ui.FeedActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.example.redsocial.ui.LoginActivity
 
+/**
+ * Actividad encargada del registro de nuevos usuarios en la aplicación
+ * Maneja la validación de campos, creación de cuenta en Firebase Auth y guardado de datos en Firestore
+ */
 class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistroBinding
@@ -21,17 +23,24 @@ class RegistroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        // Inicializar instancia de Firebase Authentication
         auth = FirebaseAuth.getInstance()
         setupListeners()
     }
 
+    /**
+     * Configura los listeners para los eventos de los botones (Registrar e Ir a Login)
+     */
     private fun setupListeners() {
         binding.btnRegistrar.setOnClickListener {
             val nombre = binding.etNombre.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
+            val confirmPassword = binding.etConfirmPassword.text.toString().trim()
 
-            if (validarEntradas(nombre, email, password)) {
+            // Si las validaciones pasan, proceder con el registro
+            if (validarEntradas(nombre, email, password, confirmPassword)) {
                 registrarUsuarioEnFirebase(nombre, email, password)
             }
         }
@@ -42,7 +51,12 @@ class RegistroActivity : AppCompatActivity() {
         }
     }
 
-    private fun validarEntradas(nombre: String, email: String, pass: String): Boolean {
+    /**
+     * Valida los campos de entrada del formulario de registro
+     * Verifica nombre, formato de email, longitud de contraseña y coincidencia de contraseñas
+     * @return True si todos los campos son válidos
+     */
+    private fun validarEntradas(nombre: String, email: String, pass: String, confirmPass: String): Boolean {
         if (nombre.isEmpty()) {
             binding.etNombre.error = "El nombre es obligatorio"
             return false
@@ -55,9 +69,17 @@ class RegistroActivity : AppCompatActivity() {
             binding.etPassword.error = "La contraseña debe tener al menos 6 caracteres"
             return false
         }
+        if (pass != confirmPass) {
+            binding.etConfirmPassword.error = "Las contraseñas no coinciden"
+            return false
+        }
         return true
     }
 
+    /**
+     * Crea un nuevo usuario en Firebase Authentication
+     * Si es exitoso, guarda la información adicional (nombre, email) en Firestore y redirige al Feed
+     */
     private fun registrarUsuarioEnFirebase(nombre: String, email: String, pass: String) {
         binding.btnRegistrar.isEnabled = false
         Toast.makeText(this, "Creando cuenta...", Toast.LENGTH_SHORT).show()
@@ -68,16 +90,20 @@ class RegistroActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     val userId = user?.uid ?: ""
 
+                    // Guardar en SharedPreferences para acceso rápido en la app
                     val prefs = getSharedPreferences("RedSocialPrefs", MODE_PRIVATE)
-                    prefs.edit().putString("USER_ID", userId).apply()
+                    prefs.edit()
+                        .putString("USER_ID", userId)
+                        .putString("USER_NAME", nombre)
+                        .apply()
 
+                    // Guardar datos del usuario en Firestore
                     firebaseManager.guardarUsuario(userId, nombre, email)
 
-                    Toast.makeText(this, "¡Bienvenido!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Bienvenido $nombre!", Toast.LENGTH_SHORT).show()
 
-                    // La clase FeedActivity ahora es reconocida por el import
+                    // Navegar al Feed y cerrar la actividad de registro
                     val intent = Intent(this, FeedActivity::class.java)
-                    // CORRECCIÓN: Era .addFlags(), no .flags()
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()

@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT: activity_registro.xml
+    DESCRIPCIÓN: Pantalla para el registro de nuevos usuarios.
+    ESTRUCTURA:
+      - ScrollView: Para garantizar que todos los campos sean accesibles en pantallas pequeñas.
+      - LinearLayout (Vertical): Contenedor principal.
+          - TextViews: Título de la app y encabezado "Registro".
+          - TextInputLayouts: Campos para Nombre, Email, Contraseña y Confirmar Contraseña.
+          - Button (Registrarme): Acción principal.
+          - Button (Ir a Login): Enlace para volver al inicio de sesión.
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,7 +28,7 @@
             android:text="Club Social"
             android:textSize="34sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="#00FF00"
             android:layout_marginBottom="8dp"/>
 
         <TextView
@@ -27,7 +38,7 @@
             android:textSize="22sp"
             android:layout_marginBottom="32dp"/>
 
-        <!-- Nombre -->
+        <!-- Campo de texto: Nombre Completo -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +51,7 @@
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Correo -->
+        <!-- Campo de texto: Correo Electrónico -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,12 +64,12 @@
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Contraseña -->
+        <!-- Campo de texto: Contraseña -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contraseña"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="16dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
@@ -66,6 +77,20 @@
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Campo de texto: Confirmar Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirmar Contraseña"
+            android:layout_marginBottom="24dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botón principal de registro -->
         <Button
             android:id="@+id/btnRegistrar"
             android:layout_width="match_parent"
@@ -73,6 +98,7 @@
             android:text="Registrarme"
             android:layout_marginBottom="16dp"/>
 
+        <!-- Botón secundario para ir al Login -->
         <Button
             android:id="@+id/btnIrALogin"
             android:layout_width="match_parent"

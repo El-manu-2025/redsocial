@@ -1,23 +1,29 @@
 package com.example.redsocial.ui
 
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.example.redsocial.ui.FeedActivity
-import com.example.redsocial.ui.LoginActivity
 
+/**
+ * Actividad inicial de la aplicación (Splash Screen invisible)
+ * Su responsabilidad es verificar si el usuario ya tiene una sesión activa
+ * y redirigirlo a la pantalla correspondiente (Feed o Registro)
+ */
 class SplashActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // No necesitamos setContentView porque es una pantalla invisible de paso rápido
-        // (O puedes poner un logo si quieres)
-
+        // No cargamos layout porque es una transición rápida
         verificarSesion()
     }
 
+    /**
+     * Verifica el estado de la sesión de Firebase Auth
+     * - Si hay usuario autenticado, va directo al FeedActivity
+     * - Si no hay usuario, va a RegistroActivity (según requerimiento del usuario)
+     * Finaliza (finish) esta actividad para que no quede en el historial
+     */
     private fun verificarSesion() {
         val auth = FirebaseAuth.getInstance()
         val usuarioActual = auth.currentUser
@@ -28,12 +34,12 @@ class SplashActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         } else {
-            // 2. NO HAY USUARIO -> Ir al Login (o Registro)
-            val intent = Intent(this, LoginActivity::class.java) // Asegúrate de tener LoginActivity
+            // 2. NO HAY USUARIO -> Ir a Registro (según solicitud)
+            val intent = Intent(this, RegistroActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
 
-        finish() // Cierra esta actividad para que no se pueda volver atrás
+        finish()
     }
 }

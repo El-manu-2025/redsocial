@@ -3,28 +3,35 @@ package com.example.redsocial
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Blob
 
-// 1. Modelo para Usuarios
+
+ // Modelo de datos que representa un Usuario en la aplicación
+
 data class Usuario(
     val nombre: String = "",
     val email: String = "",
-    // Nota: Guardar imágenes como Blob (bytes) no es lo ideal para apps grandes,
-    // pero sirve para tu ejercicio.
     val fotoPerfilBlob: Blob? = null,
     val creadoEl: Timestamp = Timestamp.now()
 )
 
-// 2. Modelo para Publicaciones
+/**
+ * Modelo de datos que representa una Publicación en el feed
+ */
 data class Publicacion(
     val userId: String = "",
+    val autorNombre: String = "",
     val texto: String = "",
-    val imagenBlob: Blob? = null,
+    val imagenBytes: ByteArray? = null,
     val creadoEl: Timestamp = Timestamp.now()
 )
 
-// 3. Modelo para Comentarios
+/**
+ * Modelo de datos que representa un Comentario en una publicación
+
+ */
 data class Comentario(
     val postId: String = "",
     val userId: String = "",
+    val autorNombre: String = "",
     val texto: String = "",
     val creadoEl: Timestamp = Timestamp.now()
 )

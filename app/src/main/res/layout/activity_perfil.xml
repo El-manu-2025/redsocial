@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT: activity_perfil.xml
+    DESCRIPCIÓN: Pantalla de perfil de usuario.
+    ESTRUCTURA:
+      - ScrollView: Contenedor principal con scroll.
+      - LinearLayout (Vertical):
+          - Título "Mi Perfil".
+          - ImageView Circular: Foto de perfil del usuario.
+          - Button: Cambiar foto.
+          - TextInputLayout: Campo para editar el nombre de usuario.
+          - TextView: Advertencia sobre cambio de nombre (360 días).
+          - Button: Guardar Cambios.
+          - Button (Rojo): Cerrar Sesión.
+      - LinearLayout (Footer): Barra de navegación inferior.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,7 +44,7 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- FOTO: Usamos ImageView normal primero para probar que no crashee -->
+            <!-- Foto de Perfil con forma circular -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivFotoPerfil"
                 android:layout_width="120dp"
@@ -51,6 +66,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_marginBottom="32dp"/>
 
+            <!-- Campo editable para el nombre de usuario -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,6 +79,7 @@
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Texto de advertencia sobre la política de cambio de nombre -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,12 +89,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"/>
 
-
             <Button
                 android:id="@+id/btnGuardarCambios"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Guardar Cambios"/>
+                
             <!-- Botón para cerrar sesión -->
             <Button
                 android:id="@+id/btnCerrarSesion"
@@ -91,7 +108,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- FOOTER -->
+    <!-- FOOTER: Barra de navegación inferior -->
     <LinearLayout
         android:id="@+id/footerNavigation"
         android:layout_width="match_parent"

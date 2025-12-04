@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT: item_post.xml
+    DESCRIPCIÓN: Diseño individual para cada publicación en el feed.
+    ESTRUCTURA:
+      - CardView: Contenedor principal con bordes redondeados y sombra.
+      - LinearLayout (Vertical):
+          - TextView (Autor): Nombre del usuario que publicó.
+          - TextView (Fecha): Tiempo transcurrido desde la publicación.
+          - TextView (Contenido): Texto del post.
+          - ImageView (Imagen): Foto adjunta (visible solo si existe).
+          - Button (Comentar): Botón para ver/agregar comentarios.
+-->
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,7 +18,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,33 +27,53 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Autor y Fecha -->
+        <!-- Nombre del Autor -->
         <TextView
             android:id="@+id/tvAutorPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre Usuario"
+            android:text="Autor"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="#000000"/>
 
+        <!-- Fecha relativa (e.g., "Hace 5 min") -->
         <TextView
             android:id="@+id/tvFechaPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hace 2 min"
+            android:text="Fecha"
             android:textSize="12sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="8dp"/>
+            android:textColor="#757575"/>
 
-        <!-- Contenido del Post -->
+        <!-- Cuerpo del texto de la publicación -->
         <TextView
             android:id="@+id/tvContenidoPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aquí va el texto de la publicación..."
+            android:text="Contenido"
             android:textSize="14sp"
-            android:textColor="#424242"/>
+            android:textColor="#333333"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Imagen adjunta (Opcional, visibilidad controlada por código) -->
+        <ImageView
+            android:id="@+id/imgPost"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:background="#F0F0F0"
+            android:src="@android:drawable/ic_menu_gallery" />
+
+        <!-- Botón de acción para ir a comentarios -->
+        <Button
+            android:id="@+id/btnComentar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comentar"
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

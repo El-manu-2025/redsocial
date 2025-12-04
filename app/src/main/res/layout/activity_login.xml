@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT: activity_login.xml
+    DESCRIPCIÓN: Pantalla de inicio de sesión.
+    ESTRUCTURA:
+      - ScrollView: Permite desplazamiento si el contenido supera la pantalla.
+      - LinearLayout (Vertical): Organiza los elementos uno debajo del otro.
+          - TextView (Título): Nombre de la app "Club Social".
+          - TextView (Subtítulo): "Iniciar Sesión".
+          - TextInputLayout (Email): Campo para ingresar el correo.
+          - TextInputLayout (Password): Campo para ingresar la contraseña.
+          - Button (Entrar): Acción principal de login.
+          - Button (Registro): Enlace a la pantalla de registro.
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,6 +26,15 @@
         android:padding="32dp"
         android:gravity="center"
         tools:context=".ui.LoginActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Club Social"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            android:textColor="#00FF00"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +76,19 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Entrar"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:layout_marginBottom="24dp"/>
+            
+        <!-- BOTÓN DE REGISTRO AGREGADO -->
+        <Button
+            android:id="@+id/btnIrARegistro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Aún no te registras? ¿Qué esperas para ser parte del club?"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            android:padding="8dp"/>
 
     </LinearLayout>
 </ScrollView>

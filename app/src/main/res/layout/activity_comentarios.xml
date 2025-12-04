@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT: activity_comentarios.xml
+    DESCRIPCIÓN: Pantalla para ver y escribir comentarios en una publicación específica.
+    ESTRUCTURA:
+      - RecyclerView superior: Lista scrolleable de comentarios existentes.
+      - LinearLayout inferior: Área fija para escribir un nuevo comentario y enviarlo.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ComentariosActivity">
+
+    <!-- 
+         LISTA DE COMENTARIOS
+         Ocupa todo el espacio disponible entre la parte superior y el área de entrada de texto.
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComentarios"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/inputContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 
+         ÁREA DE ENTRADA DE TEXTO
+         Fijada en la parte inferior de la pantalla. Contiene el campo de texto y el botón de enviar.
+    -->
+    <LinearLayout
+        android:id="@+id/inputContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#F5F5F5"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <EditText
+            android:id="@+id/etComentario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Escribe un comentario..."
+            android:padding="12dp"
+            android:background="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnEnviarComentario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enviar"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

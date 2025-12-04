@@ -34,12 +34,12 @@
         </activity>
 
         <!-- 2. OTRAS ACTIVIDADES -->
-        <!-- He eliminado MainActivity porque seguramente ya no la usas -->
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.RegistroActivity" />
         <activity android:name=".ui.FeedActivity" />
         <activity android:name=".ui.CrearPublicacionActivity" />
         <activity android:name=".ui.PerfilActivity" />
+        <activity android:name=".ui.ComentariosActivity" />
 
     </application>
 

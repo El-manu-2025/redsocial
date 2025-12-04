@@ -19,6 +19,11 @@ import java.util.concurrent.TimeUnit
 import com.example.redsocial.ui.FeedActivity
 import com.example.redsocial.ui.CrearPublicacionActivity
 
+/**
+ * Actividad que gestiona el perfil del usuario
+ * Permite visualizar y editar la información del usuario, como nombre y foto de perfil
+ * También maneja el cierre de sesión y la validación de cambios (e.g., frecuencia de cambio de nombre).
+ */
 class PerfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPerfilBinding
@@ -29,6 +34,7 @@ class PerfilActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private var ultimaFechaCambio: Long = 0
 
+    // RegisterForActivityResult
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -47,6 +53,12 @@ class PerfilActivity : AppCompatActivity() {
         setupNavigation()
     }
 
+    /**
+     * Configura los listeners para los botones de la interfaz:
+     * - Cambiar foto
+     * - Guardar cambios
+     * - Cerrar sesión
+     */
     private fun setupBotones() {
         binding.btnCambiarFoto.setOnClickListener {
             pickImage.launch("image/*")
@@ -67,8 +79,12 @@ class PerfilActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Carga los datos actuales del usuario desde Firestore para mostrarlos en la UI
+     */
     private fun cargarDatosUsuario() {
         val userId = auth.currentUser?.uid ?: return
+
 
         db.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
@@ -89,6 +105,9 @@ class PerfilActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Valida si el usuario puede cambiar su nombre (regla de 360 días) y procede al guardado
+     */
     private fun validarYGuardar() {
         val userId = auth.currentUser?.uid ?: return
         val nuevoNombre = binding.etNombreUsuario.text.toString().trim()
@@ -115,6 +134,9 @@ class PerfilActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Procesa la imagen (si hay una nueva) y actualiza los datos en Firestore
+     */
     private fun procesarGuardado(userId: String, nombre: String, actualizarFecha: Boolean) {
         binding.btnGuardarCambios.isEnabled = false
         binding.btnGuardarCambios.text = "Comprimiendo..."
@@ -132,6 +154,9 @@ class PerfilActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Convierte una imagen desde URI a un String Base64 comprimido
+     */
     private fun convertirUriABase64(uri: Uri): String? {
         try {
             val inputStream: InputStream? = contentResolver.openInputStream(uri)
@@ -147,11 +172,17 @@ class PerfilActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Decodifica un String Base64 a Bitmap
+     */
     private fun decodificarBase64(base64Str: String): Bitmap {
         val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }
 
+    /**
+     * Realiza la actualización final en la base de datos Firestore
+     */
     private fun actualizarFirestore(userId: String, nombre: String, fotoBlob: String?, cambiarFecha: Boolean) {
         val datos = mutableMapOf<String, Any>("name" to nombre)
         if (fotoBlob != null) datos["photoBlob"] = fotoBlob
@@ -171,9 +202,11 @@ class PerfilActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Configura la barra de navegación inferior para ir a otras actividades
+     */
     private fun setupNavigation() {
         binding.btnNavHome.setOnClickListener {
-            // CORREGIDO: Usamos .flags = ...
             val intent = Intent(this, FeedActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivity(intent)
